@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Weather Forecast</title>
+</head>
+<body>
+    <div class="content">
+        <div class="current-weather">
+            <div class="current-weather-modal">
+                <form action="submit" id="search-form" class="search-form">
+                    <input type="text" id="search" name="search" placeholder="Search location...">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+                <div class="modal-details">
+                    <div class="top-weather-details">
+                        <div class="location-name" id="current-weather-name">Romania RO</div>
+                        <div class="weather-image"><div id="current-weather-text">Clouds</div><img alt="cloudy" id="current-weather-image"></div>
+                        <div class="location-temperature">
+                            <p>7^o Celsius</p>
+                        </div>
+                    </div>
+                    <div class="bottom-weather-details">
+                        <div class="bottom-detail">
+                            <div class="bottom-image-icon"><img src="humidity.png" alt="humidity"></div>
+                            <div class="bottom-detail-info">
+                                <div class="info-name">Humidity</div>
+                                <div class="info-detail" id="humidtiy-detail">76%</div>
+                            </div>
+                        </div>
+                        <div class="bottom-detail">
+                            <div class="bottom-image-icon"><img src="thermometer.png" alt="thermometer"></div>
+                            <div class="bottom-detail-info">
+                                <div class="info-name">Feels like</div>
+                                <div class="info-detail" id="feels-like-detail">76%</div>
+                            </div>
+                        </div>
+                        <div class="bottom-detail">
+                            <div class="bottom-image-icon"><img src="windy.png" alt="wind"></div>
+                            <div class="bottom-detail-info">
+                                <div class="info-name">Wind speed</div>
+                                <div class="info-detail" id="wind-speed-detail">76%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="forecast-weather">
+            <div class="forecast-selector">
+            </div>
+            <div class="forecast-weather-container">
+              
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
