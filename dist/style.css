@@ -1,0 +1,147 @@
+*{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    transition: 1s;
+    color: white;
+}
+
+
+body{
+    margin: 0;
+    height: 100vh;
+    background-image: url("./starry-sky-night-mountians-5k.jpg");
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 100%;
+}
+.current-weather{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 540px;
+   
+    .current-weather-modal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border-radius: 14px;
+        height: 70%;
+        width: 540px;
+        gap: 20px;
+        background-color: rgba(70, 131, 180, 0.845);
+        .search-form{
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            input{
+                display: flex;
+                background: transparent;
+                border: none;
+                border-bottom: solid;
+                color: white;
+                border-color: black;
+                font-size: 16px;
+                width: 60%;
+            }
+            input::placeholder{
+                color: white;
+                font-size: 16px;
+            }
+            input:focus{
+                outline: none;
+            }
+            button{
+                border: none;
+                background: 0;
+            }
+            button:hover{
+                cursor: pointer;
+                transition: 0.5s;
+                transform: scale(1.4);
+            }
+        }
+        .modal-details{
+            display: flex;
+            flex-shrink: 1;
+            flex-direction: column;
+            padding: 14px;
+            gap: 20px;
+            .top-weather-details{
+                display: flex;
+                flex-direction: column;
+                .weather-image{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    img{
+                        height: 120px;
+                    }
+                }
+                .location-temperature{
+                    display: flex;
+                    justify-content: center;
+                }
+            }
+            .bottom-weather-details{
+                display: flex;
+                flex-direction: row;
+                .bottom-detail{
+                    display: flex;
+                    flex-direction: row;
+                    justify-items: center;
+                    align-items: center;
+                    .bottom-detail-info{
+                        display: flex;
+                        flex-direction:column;
+                        justify-content: center;
+                        width: 120px;
+                    }
+                }
+
+            }
+        }
+    }
+    
+}
+
+.forecast-weather{
+    .forecast-selector{
+        width: 400px;
+        padding: 20px;
+        margin-left: 40px;
+    }
+    .forecast-weather-container{
+        display: flex;
+        justify-content: space-evenly;
+        overflow: auto;
+        .forecast-weather-modal{
+            background-color: rgba(70, 131, 180, 0.845);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+            padding: 14px;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: nowrap;
+            align-items: center;
+            .forecast-day-name{
+                font-weight: 300;
+            }
+            .forecast-weather-max-temperature{
+                font-weight: bold;
+            }
+            .forecast-weather-min-temperature{
+                font-size: 14px;
+            }
+        }
+    }
+}
+

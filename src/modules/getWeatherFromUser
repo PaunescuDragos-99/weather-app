@@ -1,0 +1,234 @@
+import { CurrentWeatherDetails } from "./CurrentWeatherDetails";
+import { fromUnixTime, getDay, getHours, max, min } from "date-fns";
+import { ForecastWeather } from "./ForecastWeather";
+
+
+async function getLocation() {
+    const searchForm = document.querySelector('#search-form');
+    searchForm.addEventListener("submit", (e) =>{
+        e.preventDefault();
+        
+        const userValue = document.querySelector('#search').value;
+        getWeatherLocation(userValue);
+    })
+}
+
+async function getWeatherLocation(location){
+    try{
+        const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=8b32b91ef34fb4bccda02728cc905cdf`, {mode: 'cors'})
+        const dataWeather = await response.json();
+
+        const latitude = dataWeather[0].lat;
+        const longitude = dataWeather[0].lon;
+
+        getWeatherFromCoords(dataWeather[0].name, latitude, longitude);
+    }catch(err){
+        console.log('error 1');
+        //function handle error
+    }
+}
+
+async function getWeatherFromCoords(name, latitude, longitude){
+    try{
+        const searchWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=8b32b91ef34fb4bccda02728cc905cdf&units=metric`, {mode:'cors'})
+        const dataSearchedWeather = await searchWeather.json();
+
+        const getForecastWeather = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=8b32b91ef34fb4bccda02728cc905cdf&units=metric`);
+        const forecastWeatherData = await getForecastWeather.json();
+        let dayTwo = getDay(fromUnixTime(forecastWeatherData.list[0].dt));
+        let forecastWeatherList = [];
+        let maxTemp = [];
+        let minTemp = [];
+        let lastWeather;
+
+        console.log(forecastWeatherData);
+
+        for(let item of forecastWeatherData.list){
+            let day = getDay(fromUnixTime(item.dt));
+            let hour = getHours(fromUnixTime(item.dt));
+            // console.log('dayTwo:',dayTwo);
+            // console.log('day:',day);
+
+
+
+            if(dayTwo !== day){
+                let maxTemperatureVar = maxTemperature(maxTemp);
+                // console.log(maxTemperatureVar);
+                let minTemperatureVar = minTemperature(minTemp);
+                console.log(getDayName(dayTwo));
+                const forecastWeatherDataForList = new ForecastWeather(dayTwo, maxTemperatureVar, minTemperatureVar, item.weather[0].main);
+                forecastWeatherList.push(forecastWeatherDataForList);
+                
+                dayTwo = day;
+                maxTemp = [];
+                minTemp = [];
+            }else{
+                maxTemp.push(item.main.temp_max);
+                minTemp.push(item.main.temp_min);
+                lastWeather = item.weather[0].main;
+            }
+        }
+
+        dayTwo++;
+        let maxTemperatureVar = maxTemperature(maxTemp);
+        console.log(maxTemperatureVar);
+        let minTemperatureVar = minTemperature(minTemp);
+        console.log('hello', getDayName(dayTwo));
+        const forecastWeatherDataForList = new ForecastWeather(dayTwo, maxTemperatureVar, minTemperatureVar, lastWeather);
+        forecastWeatherList.push(forecastWeatherDataForList);
+
+
+        showForecastDays(forecastWeatherList);
+        const weatherDetails = getWeather(name,dataSearchedWeather);
+        showCurrentWeatherDOM(weatherDetails);
+    }catch(err){
+        console.log('error');
+    }
+}
+
+function maxTemperature(list){
+    let maxVar = list[0];
+    for(let temp of list){
+        if(temp > maxVar){
+            maxVar = temp;
+        }
+    }
+    return maxVar;
+}
+
+function minTemperature(list){
+    let minVar = list[0];
+    for(let temp of list){
+        if(temp < minVar){
+            minVar = temp;
+        }
+    }
+    return minVar;
+}
+
+function showForecastDays(list){
+    for(let items of list){
+        // console.log(items.day);
+        let dayName = getDayName(items.day);
+        // console.log(items.maxTemperature);
+        let maxTemp = items.maxTemperature;
+        let minTemp = items.minTemperature;
+
+        
+        // console.log(items.minTemperature);
+        // console.log(items.weather);
+        // showForecastDaysDOM();
+        showForecastDaysDOM(dayName, maxTemp, minTemp, items.weather);
+    }
+}
+
+function showForecastDaysDOM(dayName, maxTemp, minTemp, weather){
+    const container = document.querySelector('.forecast-weather-container');
+    
+    const modal = document.createElement('div');
+    modal.setAttribute('class','forecast-weather-modal');
+
+    const dayDiv = document.createElement('div');
+    dayDiv.setAttribute('class','forecast-day-name');
+    dayDiv.innerHTML = `${dayName}`;
+
+    const maxTempDiv = document.createElement('div');
+    maxTempDiv.setAttribute('class','.forecast-weather-max-temperature');
+    maxTempDiv.innerHTML = `${maxTemp}°`;
+
+    const minTempDiv = document.createElement('div');
+    minTempDiv.setAttribute('class','.forecast-weather-min-temperature');
+    minTempDiv.innerHTML = `${minTemp}°`;
+    
+    const imageDiv = document.createElement('img');
+    imageDiv.src = forecastWeatherImage(weather);
+    
+    container.appendChild(modal);
+    modal.appendChild(dayDiv);
+    modal.appendChild(maxTempDiv);
+    modal.appendChild(minTempDiv);
+    modal.appendChild(imageDiv);
+}
+
+function getDayName(dayNumber){
+    switch(dayNumber){
+        case 0:
+            return 'Sunday';
+        case 1:
+            return 'Monday';
+        case 2:
+            return 'tuesday';
+        case 3:
+            return 'Wednesday';
+        case 4:
+            return 'Thursday';
+        case 5:
+            return 'Friday';
+        case 6:
+            return 'Saturday';
+    }
+}
+
+function getWeather(name, data) {
+        const weatherDetails = new CurrentWeatherDetails( name, data.sys.country, data.weather[0].main, data.main.temp, data.main.feels_like, data.main.humidity, data.wind.speed);
+
+        return weatherDetails;
+}
+
+function showCurrentWeatherDOM(weatherDetails){
+    document.querySelector('#current-weather-name').innerText = `${weatherDetails.name} ${weatherDetails.country}`;
+    document.querySelector('#current-weather-text').innerHTML = `${weatherDetails.weather}`;
+    currentWeatherImage(weatherDetails.weather);
+    document.querySelector('.location-temperature').querySelector('p').innerText = `${weatherDetails.temp}`;
+    document.querySelector('#humidtiy-detail').innerHTML = `${weatherDetails.humidity}`;
+    document.querySelector('#feels-like-detail').innerHTML = `${weatherDetails.tempFeelsLike}`;
+    document.querySelector('#wind-speed-detail').innerHTML = `${weatherDetails.wind}`;
+}
+
+function currentWeatherImage(weather){
+    const image = document.querySelector('#current-weather-image');
+    switch(weather){
+        case "Thunderstorm":
+            image.src = '../src/asset/animated/thunder.svg';
+            break; 
+        case "Clouds":    
+            image.src = '../src/asset/animated/cloudy-night-1.svg';
+            break; 
+        case "Drizzle":
+            image.src = '../src/asset/animated/rainy-1.svg';
+            break; 
+        case "Rain":
+            image.src = '../src/asset/animated/rainy-7.svg';
+            break; 
+        case "Snow":
+            image.src = '../src/asset/animated/snowy-6.svg';
+            break; 
+        case "Clear":
+            image.src = '../src/asset/animated/day.svg';
+            break; 
+        default:
+            image.src = '../src/asset/animated/weather.svg';
+            break;
+    }
+}
+
+function forecastWeatherImage(weather){
+    switch(weather){
+        case "Thunderstorm":
+            return '../src/asset/animated/thunder.svg';
+        case "Clouds":    
+            return '../src/asset/animated/cloudy-night-1.svg';
+        case "Drizzle":
+            return '../src/asset/animated/rainy-1.svg';
+        case "Rain":
+            return '../src/asset/animated/rainy-7.svg';
+        case "Snow":
+            return '../src/asset/animated/snowy-6.svg';
+        case "Clear":
+            return '../src/asset/animated/day.svg';
+        default:
+            return '../src/asset/animated/weather.svg';
+    }
+}
+
+export {getLocation, getWeatherLocation};
