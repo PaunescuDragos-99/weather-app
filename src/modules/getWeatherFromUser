@@ -193,25 +193,25 @@ function currentWeatherImage(weather){
     const image = document.querySelector('#current-weather-image');
     switch(weather){
         case "Thunderstorm":
-            image.src = '../dist/asset/thunder.svg';
+            image.src = './asset/thunder.svg';
             break; 
         case "Clouds":    
-            image.src = '../dist/asset/cloudy-night-1.svg';
+            image.src = './asset/cloudy-night-1.svg';
             break; 
         case "Drizzle":
-            image.src = '../dist/asset/rainy-1.svg';
+            image.src = './asset/rainy-1.svg';
             break; 
         case "Rain":
-            image.src = '../dist/asset/rainy-7.svg';
+            image.src = './asset/rainy-7.svg';
             break; 
         case "Snow":
-            image.src = '../dist/asset/snowy-6.svg';
+            image.src = './asset/snowy-6.svg';
             break; 
         case "Clear":
-            image.src = '../dist/asset/day.svg';
+            image.src = './asset/day.svg';
             break; 
         default:
-            image.src = '../dist/asset/weather.svg';
+            image.src = './asset/weather.svg';
             break;
     }
 }
@@ -219,19 +219,19 @@ function currentWeatherImage(weather){
 function forecastWeatherImage(weather){
     switch(weather){
         case "Thunderstorm":
-            return '../dist/asset/thunder.svg';
+            return './asset/thunder.svg';
         case "Clouds":    
-            return '../dist/asset/cloudy-night-1.svg';
+            return './asset/cloudy-night-1.svg';
         case "Drizzle":
-            return '../dist/asset/rainy-1.svg';
+            return './asset/rainy-1.svg';
         case "Rain":
-            return '../dist/asset/rainy-7.svg';
+            return './asset/rainy-7.svg';
         case "Snow":
-            return '../dist/asset/snowy-6.svg';
+            return './asset/snowy-6.svg';
         case "Clear":
-            return '../dist/asset/day.svg';
+            return './asset/day.svg';
         default:
-            return '../dist/asset/weather.svg';
+            return './asset/weather.svg';
     }
 }
 
