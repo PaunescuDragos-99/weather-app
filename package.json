@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "style-loader": "^3.3.3",
     "svg-inline-loader": "^0.8.2",

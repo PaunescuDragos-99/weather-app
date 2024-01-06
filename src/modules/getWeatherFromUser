@@ -2,7 +2,6 @@ import { CurrentWeatherDetails } from "./CurrentWeatherDetails";
 import { fromUnixTime, getDay, getHours, max, min } from "date-fns";
 import { ForecastWeather } from "./ForecastWeather";
 
-
 async function getLocation() {
     const searchForm = document.querySelector('#search-form');
     searchForm.addEventListener("submit", (e) =>{
@@ -107,6 +106,7 @@ function minTemperature(list){
 }
 
 function showForecastDays(list){
+    removeForecastDOM();
     for(let items of list){
         // console.log(items.day);
         let dayName = getDayName(items.day);
@@ -120,6 +120,10 @@ function showForecastDays(list){
         // showForecastDaysDOM();
         showForecastDaysDOM(dayName, maxTemp, minTemp, items.weather);
     }
+}
+
+function removeForecastDOM(){
+    const modals =-document.querySelectorAll('.forecast-weather-modal').forEach(el => el.remove());
 }
 
 function showForecastDaysDOM(dayName, maxTemp, minTemp, weather){
@@ -189,25 +193,25 @@ function currentWeatherImage(weather){
     const image = document.querySelector('#current-weather-image');
     switch(weather){
         case "Thunderstorm":
-            image.src = '../src/asset/animated/thunder.svg';
+            image.src = '../dist/asset/thunder.svg';
             break; 
         case "Clouds":    
-            image.src = '../src/asset/animated/cloudy-night-1.svg';
+            image.src = '../dist/asset/cloudy-night-1.svg';
             break; 
         case "Drizzle":
-            image.src = '../src/asset/animated/rainy-1.svg';
+            image.src = '../dist/asset/rainy-1.svg';
             break; 
         case "Rain":
-            image.src = '../src/asset/animated/rainy-7.svg';
+            image.src = '../dist/asset/rainy-7.svg';
             break; 
         case "Snow":
-            image.src = '../src/asset/animated/snowy-6.svg';
+            image.src = '../dist/asset/snowy-6.svg';
             break; 
         case "Clear":
-            image.src = '../src/asset/animated/day.svg';
+            image.src = '../dist/asset/day.svg';
             break; 
         default:
-            image.src = '../src/asset/animated/weather.svg';
+            image.src = '../dist/asset/weather.svg';
             break;
     }
 }
@@ -215,20 +219,22 @@ function currentWeatherImage(weather){
 function forecastWeatherImage(weather){
     switch(weather){
         case "Thunderstorm":
-            return '../src/asset/animated/thunder.svg';
+            return '../dist/asset/thunder.svg';
         case "Clouds":    
-            return '../src/asset/animated/cloudy-night-1.svg';
+            return '../dist/asset/cloudy-night-1.svg';
         case "Drizzle":
-            return '../src/asset/animated/rainy-1.svg';
+            return '../dist/asset/rainy-1.svg';
         case "Rain":
-            return '../src/asset/animated/rainy-7.svg';
+            return '../dist/asset/rainy-7.svg';
         case "Snow":
-            return '../src/asset/animated/snowy-6.svg';
+            return '../dist/asset/snowy-6.svg';
         case "Clear":
-            return '../src/asset/animated/day.svg';
+            return '../dist/asset/day.svg';
         default:
-            return '../src/asset/animated/weather.svg';
+            return '../dist/asset/weather.svg';
     }
 }
+
+
 
 export {getLocation, getWeatherLocation};
